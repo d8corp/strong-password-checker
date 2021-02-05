@@ -1,9 +1,11 @@
-export default function strongPasswordChecker (
+const chars = [/[0-9]/, /[a-z]/, /[A-Z]/]
+
+function strongPasswordChecker (
   pass: string,
   minLength = 6,
   maxLength = 20,
   maxRepeat = 3,
-  charConditions = [/[0-9]/, /[a-z]/, /[A-Z]/]
+  charConditions = chars
 ): number {
 
   const {length} = pass
@@ -57,19 +59,25 @@ export default function strongPasswordChecker (
 
     let changed = true
 
-    while (changed) {
-      changed = false
+    if (reducer && replacer) {
+      loop: while (changed) {
+        changed = false
 
-      for (let i = 0; i < maxRepeat && replacer; i++) {
-        for (let j = 0; j < lengths.length && replacer; j++) {
-          const len = lengths[j]
+        for (let i = 0; i < maxRepeat && replacer; i++) {
+          for (let j = 0; j < lengths.length && replacer; j++) {
+            const len = lengths[j]
 
-          if (len >= maxRepeat && len % maxRepeat === i) {
-            if (lengths[j] >= maxRepeat && reducer > i && reducer) {
-              lengths[j] -= i + 1
-              replacer--
-              reducer -= i + 1
-              changed = true
+            if (len >= maxRepeat && len % maxRepeat === i) {
+              if (lengths[j] >= maxRepeat && reducer > i && reducer) {
+                lengths[j] -= i + 1
+                replacer--
+                reducer -= i + 1
+                changed = true
+
+                if (!reducer || !replacer) {
+                  break loop
+                }
+              }
             }
           }
         }
@@ -81,3 +89,5 @@ export default function strongPasswordChecker (
     return Math.max(reduceIncreaseCount, replaceCharCount, replaceCount)
   }
 }
+
+export default strongPasswordChecker

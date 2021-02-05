@@ -1,6 +1,6 @@
 {
   "name": "strong-password-checker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Password Checker returns a count of steps to pass the validation",
   "main": "index.js",
   "module": "index.es6.js",
